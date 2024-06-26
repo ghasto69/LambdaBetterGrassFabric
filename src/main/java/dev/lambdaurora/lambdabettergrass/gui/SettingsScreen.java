@@ -21,14 +21,15 @@ import dev.lambdaurora.spruceui.option.SpruceSimpleActionOption;
 import dev.lambdaurora.spruceui.screen.SpruceScreen;
 import dev.lambdaurora.spruceui.widget.SpruceButtonWidget;
 import dev.lambdaurora.spruceui.widget.SpruceLabelWidget;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 /**
  * Represents the LambdaBetterGrass settings screen.
@@ -37,7 +38,7 @@ import org.quiltmc.loader.api.minecraft.ClientOnly;
  * @version 1.4.0
  * @since 1.0.0
  */
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public class SettingsScreen extends SpruceScreen {
 	private static final String API_URL = "https://lambdaurora.dev/projects/lambdabettergrass/documentation/";
 
@@ -84,7 +85,7 @@ public class SettingsScreen extends SpruceScreen {
 	}
 
 	@Override
-	public void closeScreen() {
+	public void close() {
 		this.client.setScreen(this.parent);
 	}
 
@@ -102,7 +103,7 @@ public class SettingsScreen extends SpruceScreen {
 		this.addDrawableChild(this.resetOption.createWidget(Position.of(this, this.width / 2 - 155, this.height - 29), 150));
 		this.addDrawableChild(new SpruceButtonWidget(Position.of(this, this.width / 2 - 155 + 160, this.height - 29), 150,
 				buttonHeight, SpruceTexts.GUI_DONE,
-				(buttonWidget) -> this.closeScreen()));
+				(buttonWidget) -> this.close()));
 	}
 
 	private void buildLabels() {
@@ -125,7 +126,7 @@ public class SettingsScreen extends SpruceScreen {
 	}
 
 	@Override
-	public void renderTitle(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-		graphics.drawCenteredShadowedText(this.textRenderer, this.title, this.width / 2, 8, 16777215);
+	public void renderTitle(DrawContext graphics, int mouseX, int mouseY, float delta) {
+		graphics.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 8, 16777215);
 	}
 }

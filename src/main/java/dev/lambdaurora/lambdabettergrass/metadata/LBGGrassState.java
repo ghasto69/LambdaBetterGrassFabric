@@ -46,7 +46,7 @@ public class LBGGrassState extends LBGState {
 			variants.entrySet().forEach(entry -> {
 				var variant = entry.getValue().getAsJsonObject();
 				if (variant.has("data")) {
-					var metadataId = new Identifier(variant.get("data").getAsString());
+					var metadataId = Identifier.tryParse(variant.get("data").getAsString());
 
 					this.metadatas.put(entry.getKey(), this.loadMetadata(resourceManager, metadataId));
 				}
@@ -63,7 +63,7 @@ public class LBGGrassState extends LBGState {
 
 			this.metadata = null;
 		} else if (json.has("data")) { // Look for a common metadata if no variants are specified.
-			var metadataId = new Identifier(json.get("data").getAsString());
+			var metadataId = Identifier.tryParse(json.get("data").getAsString());
 			this.metadata = this.loadMetadata(resourceManager, metadataId);
 		} else // The state file is invalid, cannot find any metadata.
 			this.metadata = null;
@@ -77,8 +77,8 @@ public class LBGGrassState extends LBGState {
 	 * @return the metadata if loaded successfully, else {@code null}
 	 */
 	private @Nullable LBGMetadata loadMetadata(@NotNull ResourceManager resourceManager, @NotNull Identifier metadataId) {
-		var metadataResourceId = new Identifier(metadataId.getNamespace(), metadataId.getPath() + ".json");
-		try (var reader = new InputStreamReader(resourceManager.getResourceOrThrow(metadataResourceId).open())) {
+		var metadataResourceId = Identifier.tryParse(metadataId.getNamespace(), metadataId.getPath() + ".json");
+		try (var reader = new InputStreamReader(resourceManager.getResourceOrThrow(metadataResourceId).getInputStream())) {
 			var metadataJson = JsonParser.parseReader(reader).getAsJsonObject();
 
 			return new LBGMetadata(resourceManager, metadataId, metadataJson);

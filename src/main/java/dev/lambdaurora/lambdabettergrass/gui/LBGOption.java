@@ -17,7 +17,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.Option;
+import net.minecraft.client.option.SimpleOption;
 import net.minecraft.text.Text;
 
 import java.util.Optional;
@@ -34,9 +34,9 @@ import java.util.function.Function;
 public final class LBGOption {
 	private static final String KEY = "LambdaBetterGrass";
 
-	public static Option<Unit> getOption(Screen parent) {
-		return new Option<>(
-				KEY, Option.emptyTooltip(),
+	public static SimpleOption<Unit> getOption(Screen parent) {
+		return new SimpleOption<>(
+				KEY, SimpleOption.emptyTooltip(),
 				(title, object) -> title,
 				new DummyValueSet(parent),
 				Unit.INSTANCE,
@@ -45,9 +45,9 @@ public final class LBGOption {
 		);
 	}
 
-	private record DummyValueSet(Screen parent) implements Option.ValueSet<Unit> {
+	private record DummyValueSet(Screen parent) implements SimpleOption.Callbacks<Unit> {
 		@Override
-		public Function<Option<Unit>, ClickableWidget> getButtonCreator(Option.TooltipSupplier<Unit> tooltipSupplier, GameOptions options,
+		public Function<SimpleOption<Unit>, ClickableWidget> getWidgetCreator(SimpleOption.TooltipFactory<Unit> tooltipSupplier, GameOptions options,
 				int x, int y, int width, Consumer<Unit> consumer) {
 			return option -> ButtonWidget.builder(
 							Text.translatable(KEY), btn -> MinecraftClient.getInstance().setScreen(new SettingsScreen(this.parent))

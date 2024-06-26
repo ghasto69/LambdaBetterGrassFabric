@@ -17,16 +17,16 @@ import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.render.model.ModelBakeSettings;
-import net.minecraft.client.render.model.ModelBaker;
 import net.minecraft.client.render.model.UnbakedModel;
-import net.minecraft.client.resource.Material;
 import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.random.RandomGenerator;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
@@ -73,11 +73,11 @@ public class LBGCompiledLayerMetadata {
 
 	public void resolveParents(Function<Identifier, UnbakedModel> models) {
 		if (this.unbakedModels.layerModel() != null) {
-			this.unbakedModels.layerModel().resolveParents(models);
+			this.unbakedModels.layerModel().setParents(models);
 		}
 
 		if (this.unbakedModels.alternateModel() != null) {
-			this.unbakedModels.alternateModel().resolveParents(models);
+			this.unbakedModels.alternateModel().setParents(models);
 		}
 	}
 
@@ -87,15 +87,14 @@ public class LBGCompiledLayerMetadata {
 	 * @param baker the model baker
 	 * @param textureGetter the texture getter
 	 * @param rotationContainer the rotation container
-	 * @param modelId the model identifier
 	 */
-	public void bake(ModelBaker baker, Function<Material, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
+	public void bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer) {
 		if (this.unbakedModels.layerModel() != null) {
-			this.bakedLayerModel = this.unbakedModels.layerModel().bake(baker, textureGetter, rotationContainer, modelId);
+			this.bakedLayerModel = this.unbakedModels.layerModel().bake(baker, textureGetter, rotationContainer);
 		}
 
 		if (this.unbakedModels.alternateModel() != null) {
-			this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(baker, textureGetter, rotationContainer, modelId);
+			this.bakedAlternateModel = this.unbakedModels.alternateModel().bake(baker, textureGetter, rotationContainer);
 		}
 	}
 
@@ -110,7 +109,7 @@ public class LBGCompiledLayerMetadata {
 	 * @return 0 if no custom models have emitted quads, 1 if only the layer model has emitted quads,
 	 * or 2 if the custom alternative model has emitted quads
 	 */
-	public int emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<RandomGenerator> randomSupplier,
+	public int emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier,
 			RenderContext context) {
 		int success = 0;
 		if (LayeredBlockUtils.getNearbyLayeredBlocks(world, pos, this.layerType.block, state.getBlock(), false) > 1

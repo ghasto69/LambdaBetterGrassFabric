@@ -4,12 +4,12 @@
 ![Java 17](https://img.shields.io/badge/language-Java%2017-9B599A.svg?style=flat-square) <!-- modrinth_exclude.end -->
 [![GitHub license](https://img.shields.io/github/license/LambdAurora/LambdaBetterGrass?style=flat-square)](https://raw.githubusercontent.com/LambdAurora/LambdaBetterGrass/1.19/LICENSE)
 ![Environment: Client](https://img.shields.io/badge/environment-client-1976d2?style=flat-square)
-[![Mod loader: Quilt]][quilt] <!-- modrinth_exclude.start -->
+[![Mod loader: Fabric]][fabric] <!-- modrinth_exclude.start -->
 ![Version](https://img.shields.io/github/v/tag/LambdAurora/LambdaBetterGrass?label=version&style=flat-square)
 [![CurseForge](http://cf.way2muchnoise.eu/title/400322.svg)](https://www.curseforge.com/minecraft/mc-mods/lambdabettergrass)
 <!-- modrinth_exclude.end -->
 
-An actual better grass and snow mod for Quilt.
+An actual better grass and snow mod for Fabric.
 
 ## 📖 What's this mod?
 
@@ -61,7 +61,7 @@ Searching other mods to replace OptiFine? [Check out this list!](https://lambdau
 
 Using this mod is very simple!
 
-Install it in your mods folder along with [Quilted Fabric API] and [ModMenu].
+Install it in your mods folder along with [Fabric API] and [ModMenu].
 
 You will notice that some blocks like grass blocks will connect together, if you want to try other options or want to have the same look as OptiFine you can look into the settings screen of the mod via [ModMenu].
 
@@ -108,9 +108,9 @@ GitHub
 
 <!-- modrinth_exclude.long_end -->
 
-[quilt]: https://quiltmc.org
-[Mod loader: Quilt]: https://img.shields.io/badge/modloader-Quilt-9115ff?style=flat-square
-[Quilted Fabric API]: https://modrinth.com/mod/qsl "Quilted Fabric API Modrinth page"
+[fabric]: https://fabricmc.net
+[Mod loader: Fabric]: https://img.shields.io/badge/mod%20loader-fabric-d64541?style=flat-square
+[Fabric API]: https://modrinth.com/mod/fabric-api "Fabric API Modrinth page"
 [ModMenu]: https://modrinth.com/mod/modmenu "ModMenu Modrinth page"
 [Sodium]: https://modrinth.com/mod/sodium "Sodium Modrinth page"
 [Indium]: https://modrinth.com/mod/indium "Indium Modrinth page"

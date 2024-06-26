@@ -2,7 +2,7 @@
   "defaultMap": {
     "spriteMap": [
       {
-        "sprite": "minecraft:grass",
+        "sprite": "minecraft:short_grass",
         "material": "canvas:low_foliage"
       }
     ]

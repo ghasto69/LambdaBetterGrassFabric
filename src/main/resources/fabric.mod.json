@@ -3,7 +3,7 @@
   "id": "lambdabettergrass",
   "name": "LambdaBetterGrass",
   "version": "${version}",
-  "description": "Adds actual better grass. But now on Quilt, so move there ;)",
+  "description": "Adds actual better grass and actual better snow. All of that while being customizable!",
   "authors": [
     "LambdAurora"
   ],
@@ -14,16 +14,21 @@
   },
   "license": "MIT",
   "icon": "assets/lambdabettergrass/icon.png",
+  "accessWidener": "lambdabettergrass.accesswidener",
   "environment": "client",
   "entrypoints": {
-    "preLaunch": [
-      "dev.lambdaurora.lambdabettergrass.MigrationNotice"
+    "client": [
+      "dev.lambdaurora.lambdabettergrass.LambdaBetterGrass"
+    ],
+    "modmenu": [
+      "dev.lambdaurora.lambdabettergrass.LambdaBetterGrassModMenu"
     ]
   },
   "mixins": [
-    "lambdabettergrass.fabric.mixins.json"
+    "lambdabettergrass.mixins.json"
   ],
   "depends": {
+    "fabric-api": ">0.100.0",
     "fabricloader": ">=0.14.7",
     "minecraft": ">=1.20",
     "java": ">=17"

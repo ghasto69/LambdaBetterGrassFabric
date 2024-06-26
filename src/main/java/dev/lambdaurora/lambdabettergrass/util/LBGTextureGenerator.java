@@ -9,15 +9,16 @@
 
 package dev.lambdaurora.lambdabettergrass.util;
 
-import com.mojang.blaze3d.texture.NativeImage;
 import dev.lambdaurora.lambdabettergrass.LambdaBetterGrass;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.texture.NativeImage;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.io.IOException;
 
-@ClientOnly
+@Environment(EnvType.CLIENT)
 public enum LBGTextureGenerator {
 	; // No instantiation possible <3
 
@@ -36,7 +37,7 @@ public enum LBGTextureGenerator {
 		try {
 			var fallbackResource = resourceManager.getResourceOrThrow(FALLBACK_TEXTURE);
 
-			return NativeImage.read(fallbackResource.open());
+			return NativeImage.read(fallbackResource.getInputStream());
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load fallback texture \"" + FALLBACK_TEXTURE + "\"!");
 			return new NativeImage(16, 16, false);
@@ -55,10 +56,11 @@ public enum LBGTextureGenerator {
 		try {
 			var nativeImageResource = resourceManager.getResourceOrThrow(path);
 
-			return NativeImage.read(nativeImageResource.open());
+			return NativeImage.read(nativeImageResource.getInputStream());
 		} catch (IOException e) {
 			LambdaBetterGrass.get().warn("Could not load texture \"" + path + "\"! Exception: " + e.getMessage()
 					+ ". Loading fallback texture instead.");
+
 			return getFallbackNativeImage(resourceManager);
 		}
 	}
@@ -74,7 +76,7 @@ public enum LBGTextureGenerator {
 
 		for (int y = 0; y < result.getHeight(); y++) {
 			for (int x = 0; x < result.getWidth(); x++) {
-				result.setPixelColor(source.getWidth() - 1 - x, y, source.getPixelColor(x, y));
+				result.setColor(source.getWidth() - 1 - x, y, source.getColor(x, y));
 			}
 		}
 
@@ -93,7 +95,7 @@ public enum LBGTextureGenerator {
 	public static Identifier generateTexture(String target, NativeImage side, NativeImage top, NativeImage mask) {
 		var image = applyMask(side, top, mask);
 
-		return LambdaBetterGrass.get().resourcePack.dynamicallyPutImage(target, image);
+		return LambdaBetterGrass.get().resourcePack.putImage(target, image);
 	}
 
 	/**
@@ -116,14 +118,14 @@ public enum LBGTextureGenerator {
 		// Time to do AND operation
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				int sourceRGB = source.getPixelColor(getTrueCoordinate(width, source.getWidth(), x), getTrueCoordinate(height, source.getHeight(), y));
-				int topRGB = top.getPixelColor(getTrueCoordinate(width, top.getWidth(), x), getTrueCoordinate(height, top.getHeight(), y));
+				int sourceRGB = source.getColor(getTrueCoordinate(width, source.getWidth(), x), getTrueCoordinate(height, source.getHeight(), y));
+				int topRGB = top.getColor(getTrueCoordinate(width, top.getWidth(), x), getTrueCoordinate(height, top.getHeight(), y));
 
 				// If the mask pixel opacity is 255 (-1 because signed byte) use the top texture pixel color, else use the source pixel color.
-				if (mask.getPixelOpacity(getTrueCoordinate(width, mask.getWidth(), x), getTrueCoordinate(height, mask.getHeight(), y)) == -1)
-					output.setPixelColor(x, y, topRGB);
+				if (mask.getOpacity(getTrueCoordinate(width, mask.getWidth(), x), getTrueCoordinate(height, mask.getHeight(), y)) == -1)
+					output.setColor(x, y, topRGB);
 				else
-					output.setPixelColor(x, y, sourceRGB);
+					output.setColor(x, y, sourceRGB);
 			}
 		}
 		return output;

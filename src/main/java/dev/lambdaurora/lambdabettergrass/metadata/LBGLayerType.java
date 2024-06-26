@@ -17,6 +17,7 @@ import dev.lambdaurora.spruceui.util.Nameable;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.render.RenderLayer;
@@ -26,7 +27,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.qsl.block.extensions.api.client.BlockRenderLayerMap;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -108,12 +108,12 @@ public class LBGLayerType implements Nameable {
 		if (currentLayer != this.defaultRenderLayer && !this.acceptedRenderLayers.contains(currentLayer)) {
 			this.oldRenderLayers.putIfAbsent(block, currentLayer);
 
-			BlockRenderLayerMap.put(this.defaultRenderLayer, block);
+			BlockRenderLayerMap.INSTANCE.putBlock(block, this.defaultRenderLayer);
 		}
 	}
 
 	private void resetSelf() {
-		this.oldRenderLayers.forEach((block, renderLayer) -> BlockRenderLayerMap.put(renderLayer, block));
+		this.oldRenderLayers.forEach((block, renderLayer) -> BlockRenderLayerMap.INSTANCE.putBlock(block, renderLayer));
 	}
 
 	/**
@@ -137,17 +137,17 @@ public class LBGLayerType implements Nameable {
 	}
 
 	public static void load(Identifier resourceId, Resource resource) {
-		var id = new Identifier(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
-		try (var reader = new InputStreamReader(resource.open())) {
+		var id = Identifier.of(resourceId.getNamespace(), resourceId.getPath().replace(".json", ""));
+		try (var reader = new InputStreamReader(resource.getInputStream())) {
 			var json = JsonParser.parseReader(reader).getAsJsonObject();
 
-			var affectId = new Identifier(json.get("block").getAsString());
+			var affectId = Identifier.tryParse(json.get("block").getAsString());
 			var block = Registries.BLOCK.get(affectId);
 
 			if (block == Blocks.AIR)
 				return;
 
-			var modelId = new Identifier(json.get("model").getAsString());
+			var modelId = Identifier.tryParse(json.get("model").getAsString());
 
 			var acceptedRenderLayers = new ReferenceArrayList<RenderLayer>();
 			RenderLayer defaultRenderLayer = null;

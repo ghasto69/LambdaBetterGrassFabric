@@ -29,7 +29,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.random.RandomGenerator;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 
 import java.util.function.Supplier;
@@ -55,7 +55,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 	}
 
 	@Override
-	public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<RandomGenerator> randomSupplier, RenderContext context) {
+	public void emitBlockQuads(BlockRenderView world, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
 		var mode = LambdaBetterGrass.get().config.getMode();
 
 		if (mode == LBGMode.OFF) {
@@ -70,7 +70,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 			var up = world.getBlockState(upPos);
 			if (!up.isAir()) {
 				var blockId = Registries.BLOCK.getId(up.getBlock());
-				var stateId = new Identifier(blockId.getNamespace(), blockId.getPath());
+				var stateId = Identifier.of(blockId.getNamespace(), blockId.getPath());
 				if (LayeredBlockUtils.shouldGrassBeSnowy(world, pos, stateId, up, false)) {
 					((FabricBakedModel) this.metadata.getSnowyModelVariant())
 							.emitBlockQuads(world, state.with(Properties.SNOWY, true), pos, randomSupplier, context);
@@ -163,7 +163,7 @@ public class LBGBakedModel extends ForwardingBakedModel {
 						return true;
 					else if (adjacent.getBlock() instanceof SnowyBlock) {
 						var blockId = Registries.BLOCK.getId(up.getBlock());
-						var stateId = new Identifier(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
+						var stateId = Identifier.of(blockId.getNamespace(), "bettergrass/states/" + blockId.getPath());
 						if (LayeredBlockUtils.shouldGrassBeSnowy(world, adjacentPos, stateId, up, true))
 							return true;
 					}
