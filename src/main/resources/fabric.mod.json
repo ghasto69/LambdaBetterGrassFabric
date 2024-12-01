@@ -5,12 +5,13 @@
   "version": "${version}",
   "description": "Adds actual better grass and actual better snow. All of that while being customizable!",
   "authors": [
-    "LambdAurora"
+    "LambdAurora",
+    "IMS212",
+    "_Ghasto"
   ],
   "contact": {
     "homepage": "https://lambdaurora.dev/projects/lambdabettergrass",
-    "sources": "https://github.com/LambdAurora/LambdaBetterGrass.git",
-    "issues": "https://github.com/LambdAurora/LambdaBetterGrass/issues"
+    "sources": "https://github.com/ghasto69/LambdaBetterGrassFabric"
   },
   "license": "MIT",
   "icon": "assets/lambdabettergrass/icon.png",
@@ -30,7 +31,7 @@
   "depends": {
     "fabric-api": ">0.100.0",
     "fabricloader": ">=0.14.7",
-    "minecraft": ">=1.20",
+    "minecraft": ">=1.21",
     "java": ">=17"
   },
   "recommends": {
